@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Photobox Book → PDF</title>
+<style>
+  :root {
+    --bg: #0f1115; --panel: #171a21; --panel2: #1e222b; --line: #2a2f3a;
+    --text: #e8eaf0; --muted: #9aa3b2; --accent: #5b8cff;
+    --accent2: #7c5cff; --ok: #37d399; --err: #ff6b6b; --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; font: 15px/1.5 -apple-system, Segoe UI, Roboto, sans-serif;
+    color: var(--text);
+    background: radial-gradient(1200px 700px at 70% -10%, #1c2333 0%, var(--bg) 55%);
+    display: flex; justify-content: center; padding: 48px 20px;
+  }
+  .wrap { width: 100%; max-width: 760px; }
+  header { margin-bottom: 28px; }
+  .badge { display:inline-block; font-size:12px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--accent); background:rgba(91,140,255,.1); border:1px solid rgba(91,140,255,.25);
+    padding:4px 10px; border-radius:99px; margin-bottom:14px; }
+  h1 { margin:0 0 8px; font-size:28px; font-weight:650; letter-spacing:-.02em; }
+  h1 span { background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  p.sub { margin:0; color:var(--muted); }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px; box-shadow:0 20px 50px -30px rgba(0,0,0,.8); }
+  label { display:block; font-size:13px; color:var(--muted); margin:0 0 6px; }
+  input[type=url], input[type=number] {
+    width:100%; padding:12px 14px; background:var(--panel2); border:1px solid var(--line);
+    border-radius:10px; color:var(--text); font-size:14px; outline:none; transition:border .15s; }
+  input:focus { border-color:var(--accent); }
+  .row { display:flex; gap:14px; margin-top:14px; flex-wrap:wrap; }
+  .row > div { flex:1; min-width:120px; }
+  .check { display:flex; align-items:center; gap:9px; margin-top:16px; color:var(--muted); font-size:13px; }
+  .check input { width:16px; height:16px; accent-color:var(--accent); }
+  button {
+    margin-top:20px; width:100%; padding:13px; border:0; border-radius:10px; cursor:pointer;
+    font-size:15px; font-weight:600; color:#fff;
+    background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:opacity .15s, transform .05s; }
+  button:hover { opacity:.92; } button:active { transform:translateY(1px); }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  .panel-out { margin-top:22px; display:none; }
+  .panel-out.show { display:block; }
+  .bar { height:8px; background:var(--panel2); border-radius:99px; overflow:hidden; margin-bottom:14px; }
+  .bar > i { display:block; height:100%; width:0; border-radius:99px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width .3s; }
+  .logbox { background:#0c0e13; border:1px solid var(--line); border-radius:10px; padding:12px 14px;
+    font:12.5px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color:#b9c2d0;
+    max-height:230px; overflow:auto; white-space:pre-wrap; }
+  .logbox .ok { color:var(--ok); } .logbox .er { color:var(--err); }
+  .result { margin-top:18px; padding:18px; border:1px solid rgba(55,211,153,.3);
+    background:rgba(55,211,153,.06); border-radius:12px; display:none; }
+  .result.show { display:block; }
+  .result h3 { margin:0 0 12px; font-size:16px; }
+  .dl { display:inline-flex; align-items:center; gap:8px; text-decoration:none; color:#fff;
+    background:var(--ok); padding:10px 16px; border-radius:9px; font-weight:600; font-size:14px; }
+  .dl.alt { background:var(--panel2); color:var(--text); border:1px solid var(--line); margin-left:10px; }
+  .thumbs { display:grid; grid-template-columns:repeat(auto-fill,minmax(90px,1fr)); gap:8px; margin-top:16px; }
+  .thumbs img { width:100%; border-radius:6px; border:1px solid var(--line); display:block; }
+  footer { margin-top:22px; color:var(--muted); font-size:12.5px; text-align:center; }
+  a { color:var(--accent); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="badge">Photobox → PDF</div>
+      <h1>Turn a Photobox book into a <span>high-res PDF</span></h1>
+      <p class="sub">Paste the “view book online” share link from any Photobox site (.fr, .com, .co.uk, .de …). Every page is captured at full source resolution and assembled into a print-size PDF that matches the on-screen book.</p>
+    </header>
+
+    <div class="card">
+      <label for="url">Photobox book URL</label>
+      <input id="url" type="url" placeholder="https://www.photobox.com/…?widgetId=…&securityId=…" />
+      <div class="row">
+        <div>
+          <label for="width">Page width (cm)</label>
+          <input id="width" type="number" value="28" min="5" max="200" step="0.5" />
+        </div>
+      </div>
+      <label class="check"><input id="spreads" type="checkbox" checked /> Open as two-page spreads (matches the online viewer)</label>
+      <button id="go">Create PDF</button>
+
+      <div class="panel-out" id="out">
+        <div class="bar"><i id="barFill"></i></div>
+        <div class="logbox" id="log"></div>
+        <div class="result" id="result">
+          <h3 id="resultTitle">✅ Your PDF book is ready</h3>
+          <a class="dl" id="pdfLink" download>⬇ Download PDF</a>
+          <div class="thumbs" id="thumbs"></div>
+        </div>
+      </div>
+    </div>
+
+    <footer>Runs locally · pages are downloaded losslessly, never re-compressed · PDF sized to a real photobook page</footer>
+  </div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const go = $('go'), out = $('out'), logBox = $('log'), bar = $('barFill');
+const result = $('result'), pdfLink = $('pdfLink'), thumbs = $('thumbs');
+
+let total = 0, downloaded = 0;
+
+function addLog(msg, cls) {
+  const line = document.createElement('div');
+  if (cls) line.className = cls;
+  line.textContent = msg;
+  logBox.appendChild(line);
+  logBox.scrollTop = logBox.scrollHeight;
+}
+
+go.addEventListener('click', () => {
+  const url = $('url').value.trim();
+  if (!/^https?:\/\//i.test(url)) { alert('Please paste a valid Photobox book URL.'); return; }
+  const widthCm = $('width').value || 28;
+  const spreads = $('spreads').checked;
+
+  go.disabled = true; go.textContent = 'Working…';
+  out.classList.add('show'); result.classList.remove('show');
+  logBox.innerHTML = ''; thumbs.innerHTML = ''; bar.style.width = '4%';
+  total = 0; downloaded = 0;
+
+  const qs = new URLSearchParams({ url, widthCm, spreads: String(spreads) });
+  const es = new EventSource('/convert?' + qs.toString());
+
+  es.addEventListener('log', (e) => {
+    const { msg } = JSON.parse(e.data);
+    addLog(msg);
+    if (/^Saved /.test(msg) && total) {
+      downloaded++;
+      bar.style.width = Math.min(90, 15 + (downloaded / total) * 70) + '%';
+    }
+  });
+  es.addEventListener('progress', (e) => {
+    const d = JSON.parse(e.data);
+    if (d.stage === 'extracted') { total = d.total; bar.style.width = '15%'; }
+  });
+  es.addEventListener('done', (e) => {
+    const d = JSON.parse(e.data);
+    bar.style.width = '100%';
+    addLog('Done — ' + d.pages + ' pages.', 'ok');
+    pdfLink.href = d.pdf;
+    $('resultTitle').textContent = '✅ Your ' + d.pages + '-page PDF book is ready';
+    (d.jpgs || []).forEach((src) => {
+      const img = document.createElement('img'); img.src = src; img.loading = 'lazy';
+      thumbs.appendChild(img);
+    });
+    result.classList.add('show');
+    es.close(); go.disabled = false; go.textContent = 'Create PDF';
+  });
+  es.addEventListener('error', (e) => {
+    let m = 'Connection lost.';
+    try { m = JSON.parse(e.data).msg; } catch {}
+    addLog('Error: ' + m, 'er');
+    es.close(); go.disabled = false; go.textContent = 'Create PDF';
+  });
+});
+</script>
+</body>
+</html>

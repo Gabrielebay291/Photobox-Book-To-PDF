@@ -1,0 +1,21 @@
+{
+  "name": "photobox-book-to-pdf",
+  "version": "1.0.0",
+  "description": "Turn a Photobox online photo book into a high-resolution, print-size PDF.",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "convert": "node src/convert.mjs",
+    "postinstall": "playwright install chromium"
+  },
+  "keywords": ["photobox", "pdf", "photobook", "playwright"],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "express": "^5.2.1",
+    "pdf-lib": "^1.17.1",
+    "playwright": "^1.61.1",
+    "sharp": "^0.35.3"
+  }
+}
